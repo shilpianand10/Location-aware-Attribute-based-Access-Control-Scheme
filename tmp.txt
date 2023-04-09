@@ -1,0 +1,86 @@
+server
+- encrypts a message
+
+multiple users -> only some have the access to decrypt based on the their attributes
+- policy defines who can access
+
+
+- access tree
+	- root -> 	
+
+
+
+OR -> 1
+AND -> numX
+
+leaf -> 1
+
+
+
+pub -> public key
+msk -> master secret key
+prv -> private key
+cph -> cipher text
+	-> two groups: GT, G1. G1xG1 -> GT
+	-> policy -> boolean expression -> tree
+
+Zr -> group containing 0...(r-1)
+
+
+Static attributes
+Dynamic:
+	- Space: location
+	- Trap door in nodes for such attributes
+
+
+Setup -> PK, MSK
+Encrypt(PK, Message, Access Tree) 
+	-> Encrypts M and produces CT
+	-> CT implicitly contains access tree
+Key Generation(MSK, S: set of attributes for the user)
+	-> Private/Secret key SK
+Decrypt(PK, CT, SK)
+	-> Returns the original message M
+
+
+Current Impl:
+
+- Policy is specified as a string, and then later converted to BswabePolicy.
+	- The String is basically a postfix traversal of the tree.
+	- We can create a new node type to denote trap-doors. ex. :trap:
+		- What should we store here?
+- Policy contains the following:
+	- Attribute (for leaf node)
+	- c: Cy
+	- cp: Cy_prime
+	- children
+	- q (only for enc)
+		- BswabePolynomial
+			- degree
+			- coefficients, for x^0 to x^degree(array of elements)
+	- only for dec
+		- satisfiable
+		- min_leaves
+		- attri
+
+- elementFromString: H -> Hash function
+
+
+- BswabeCphKey
+	- m: ???
+	- s: secret
+
+
+
+Bswabe.java 
+	-> fillPolicy 
+		-> Store the trapdoor function TD_x^k
+			-> Create a new class TrapDoorFn
+			
+		-> isTrapDoor 
+		-> Generate sxk (for location k).
+		-> Change for trapdoor case: p.q = randPoly(p.k - 1, e[=q0]);
+			-> randPoly should incorporate changes (q1 = ....)
+				-> zeroVal = zeroVal-sxk for lock
+
+
