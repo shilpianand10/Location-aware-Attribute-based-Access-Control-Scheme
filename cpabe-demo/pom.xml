@@ -20,6 +20,13 @@
             <artifactId>cpabe-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>ch.hsr</groupId>
+            <artifactId>geohash</artifactId>
+            <version>1.4.0</version>
+        </dependency>
     </dependencies>
 
-</project>
+
+        </project>

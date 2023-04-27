@@ -28,7 +28,7 @@ public class Cpabe {
 		byte[] pub_byte, msk_byte;
 		BswabePub pub = new BswabePub();
 		BswabeMsk msk = new BswabeMsk();
-		Bswabe.setup(pub, msk);
+		Bswabe.setup(pub, msk);  //calls the actual mathematical functions in bswabe
 
 		/* store BswabePub into mskfile */
 		pub_byte = SerializeUtils.serializeBswabePub(pub);

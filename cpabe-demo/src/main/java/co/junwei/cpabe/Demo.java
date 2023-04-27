@@ -1,12 +1,17 @@
 package co.junwei.cpabe;
 
+import ch.hsr.geohash.GeoHash;
 import co.junwei.bswabe.Bswabe;
 import it.unisa.dia.gas.jpbc.Pairing;
+
+import java.math.BigInteger;
 
 public class Demo {
 	final static boolean DEBUG = true;
 
 	static String dir = "demo/cpabe";
+
+	static final int GEOHASH_PRECISION = 5;
 
 	static String pubfile = dir + "/pub_key";
 	static String mskfile = dir + "/master_key";
@@ -419,8 +424,18 @@ public class Demo {
 
 		ElementsStore.initialize(p);
 
-		Location bbs = new Location("bbs", "10,20", p);
-		Location blr = new Location("blr", "10,30", p);
+		double latBbs = 17.424728;
+		double lonBbs = 78.390378;
+
+		String bbsGeoHash = getLocationHash(latBbs, lonBbs);
+
+		double latBlr = 12.965621;
+		double lonBlr = 77.596888;
+		String blrGeoHash = getLocationHash(latBlr, lonBlr);
+		System.out.println(blrGeoHash + ", " + bbsGeoHash);
+
+		Location bbs = new Location("bbs", bbsGeoHash, p);
+		Location blr = new Location("blr", blrGeoHash, p);
 
 		LocationStore.addLocation(bbs);
 		LocationStore.addLocation(blr);
@@ -441,9 +456,19 @@ public class Demo {
 		test.enc(pubfile, policy, inputfile, encfile);
 		println("//end to enc");
 
+		double latUsr = 17.413705;
+		double lonUsr = 78.373778;
+		String userGeoHash = getLocationHash(latUsr, lonUsr);
+
 		println("//start to dec");
-		test.dec(pubfile, prvfile, encfile, decfile, "10,20");
+		test.dec(pubfile, prvfile, encfile, decfile, userGeoHash);
 		println("//end to dec");
+	}
+
+	private static String getLocationHash(double lat, double lon) {
+		String binaryString = GeoHash.withCharacterPrecision(lat, lon, GEOHASH_PRECISION).toBinaryString();
+		long locationLong = Long.parseLong(binaryString, 2);
+		return new BigInteger(String.valueOf(locationLong)).toString(32);
 	}
 
 	/* connect element of array with blank */
